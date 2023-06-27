@@ -12,6 +12,7 @@ import (
 	"io"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 // 两种。一种是快速的..一种是长时间执行的
@@ -37,7 +38,7 @@ func ReplyText(reply func(context string, msgType ...string) error, text string)
 					{
 						{
 							Tag:      "text",
-							UnEscape: true,
+							UnEscape: false,
 							Text:     text,
 						},
 					},
@@ -49,7 +50,7 @@ func ReplyText(reply func(context string, msgType ...string) error, text string)
 		return fmt.Errorf("failed to build content: %v", err)
 	}
 	if err := reply(string(content), msgType); err != nil {
-		return fmt.Errorf("failed to reply: %v", err)
+		logger.Info(fmt.Sprintf("failed to reply: %v", err))
 	}
 
 	return nil
@@ -63,7 +64,6 @@ func getCommand(text string, request *feishuEvent.EventRequest) string {
 	} else if request.IsP2pChat() {
 		command = text
 	}
-	logger.Info("command %s", command)
 	return command
 }
 
@@ -118,11 +118,9 @@ func FeishuServer(feishuConf *chatbot.Config) {
 			logger.Infof("ignore empty command message")
 			return nil
 		}
-		cmdArr := strings.Split(command, " ")
-		cmd := cmdArr[0]
-		args := cmdArr[1:]
-
-		RunCommand(reply, cmd, args...)
+		go func() {
+			RunCommand(reply, command)
+		}()
 		return nil
 	})
 
@@ -131,30 +129,38 @@ func FeishuServer(feishuConf *chatbot.Config) {
 	}
 }
 
-func RunCommand(reply chatbot.MessageReply, command string, args ...string) {
-	cmd := exec.Command(command, args...)
+func RunCommand(reply chatbot.MessageReply, command string) {
+	cmd := exec.Command("bash", "-c", fmt.Sprintf("%s", command))
+	logs.Println(cmd)
 	stderr, err := cmd.StderrPipe()
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		err := ReplyText(reply, fmt.Sprintf("run command error %v", err))
-		if err != nil {
-			logger.Info("error reply message")
-		}
+		ReplyText(reply, fmt.Sprintf("run command error %v", err))
 	}
+	// Start command
+	if err := cmd.Start(); err != nil {
+		logger.Info("error starting command:", err)
+		ReplyText(reply, fmt.Sprintf("error run command bro:%v", err))
+		return
+	}
+
 	stdall := io.MultiReader(stdout, stderr)
 	scanner := bufio.NewScanner(stdall)
-	for scanner.Scan() {
-		err := ReplyText(reply, scanner.Text())
-		if err != nil {
-			logger.Info("error reply message")
+	for {
+		texts := make([]string, 0)
+		for scanner.Scan() {
+			texts = append(texts, scanner.Text())
 		}
+		if len(texts) == 0 {
+			break
+		}
+		ReplyText(reply, strings.Join(texts, "\r\n"))
+		time.Sleep(1 * time.Second)
 	}
+
 	err = cmd.Wait()
 	if err != nil {
-		err := ReplyText(reply, fmt.Sprintf("run command error %v", err))
-		if err != nil {
-			logger.Info("error reply message")
-		}
+		ReplyText(reply, fmt.Sprintf("run command error %v", err))
 	}
 	defer stdout.Close()
 	defer stderr.Close()
