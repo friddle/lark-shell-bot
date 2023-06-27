@@ -6,6 +6,7 @@ import (
 	chatgpt "github.com/go-zoox/chatgpt-client"
 	"github.com/go-zoox/uuid"
 	"log"
+	"os"
 	regexp "regexp"
 	"strings"
 )
@@ -26,9 +27,16 @@ func NewChatGptClient() *SSHGptClient {
 	if err != nil {
 		return nil
 	}
+	var promptBytes []byte
+	if Exists("Prompt.txt") {
+		promptBytes, _ = os.ReadFile("Prompt.txt")
+	} else {
+		promptBytes, _ = PromptFs.ReadFile("prompt/Prompt.txt")
+	}
+
 	client := &SSHGptClient{
 		client:     gptClient,
-		promptText: "你作为资深的SRE，请帮助用户翻译固定的文档",
+		promptText: string(promptBytes),
 		describeText: "请把如下的描述翻译成固定的Linux命令格式。" +
 			"并以 command:[Linux命令]的格式输出,假如无法识别为Linux命令，则返回为\"command:[]\"\n" +
 			"描述为:%s",
