@@ -1,5 +1,5 @@
 .feishu.env
-.idea
+.idea/
 .vscode
 build_local.sh
 dist/

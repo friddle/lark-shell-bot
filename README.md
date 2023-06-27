@@ -20,9 +20,11 @@ https://github.com/whatwewant/chatgpt-for-chatbot-feishu
 
 
 直接使用
+```shell
 wget -O feishu_shell_bot https://github.com/friddle/lark-shell-bot/releases/download/1.0/feishu_shell_bot
 chmod +x feishu_shell_bot
 wget -O .feishu.env https://raw.githubusercontent.com/friddle/lark-shell-bot/master/.feishu.env.sample
 编辑 .feishu.env
 ./feishu_shell_bot
+```
 
