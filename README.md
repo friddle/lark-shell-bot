@@ -16,7 +16,7 @@ FEISHU_BOT_PORT=监听的端口
 
 具体配置的含义请参考飞书后台开发者的文档
 具体飞书怎么配置后端程序。请直接参考项目
-https://github.com/whatwewant/chatgpt-for-chatbot-feishu
+https://www.feishu.cn/hc/zh-CN/articles/360049067916-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%BC%81%E4%B8%9A%E8%87%AA%E5%BB%BA%E5%BA%94%E7%94%A8
 
 
 直接使用
@@ -27,4 +27,26 @@ wget -O .feishu.env https://raw.githubusercontent.com/friddle/lark-shell-bot/mas
 编辑 .feishu.env
 ./feishu_shell_bot
 ```
+
+高阶使用
+设置ChatGpt
+```shell
+编辑.chatgpt.env 文件
+填写相应的key
+```
+然后飞书请求的时候执行
+```shell
+/chatgpt 查看本地目录
+```
+
+设置服务器
+```shell
+编辑 .machines.env 文件
+填写服务器信息
+然后执行
+/machines 查看服务器列表
+/ssh machine-01(配置的服务器名字) ls
+```
+
+
 

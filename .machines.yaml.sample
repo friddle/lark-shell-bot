@@ -1,0 +1,11 @@
+- hostname: machine-1
+  ipaddress: 192.168.1.1
+  password: abc123456
+  port: 22
+  username: root
+
+- hostname: machine-2
+  ipaddress: 192.168.1.2
+  password: abc123456
+  port: 22
+  username: root

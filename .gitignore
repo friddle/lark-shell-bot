@@ -3,3 +3,5 @@
 .vscode
 build_local.sh
 dist/
+.chatgpt.env
+.machines.yaml
