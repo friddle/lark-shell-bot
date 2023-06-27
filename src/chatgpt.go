@@ -12,10 +12,9 @@ import (
 )
 
 type SSHGptClient struct {
-	client       chatgpt.Client
-	config       chatgpt.Config
-	promptText   string
-	describeText string
+	client     chatgpt.Client
+	config     chatgpt.Config
+	promptText string
 }
 
 func NewChatGptClient() *SSHGptClient {
@@ -33,13 +32,11 @@ func NewChatGptClient() *SSHGptClient {
 	} else {
 		promptBytes, _ = PromptFs.ReadFile("prompt/Prompt.txt")
 	}
+	log.Printf("prompt 信息为:" + string(promptBytes))
 
 	client := &SSHGptClient{
 		client:     gptClient,
-		promptText: string(promptBytes),
-		describeText: "请把如下的描述翻译成固定的Linux命令格式。" +
-			"并以 command:[Linux命令]的格式输出,假如无法识别为Linux命令，则返回为\"command:[]\"\n" +
-			"描述为:%s",
+		promptText: string(promptBytes) + "\r 描述为: %s",
 	}
 	client.RunInit()
 	return client
@@ -48,7 +45,7 @@ func NewChatGptClient() *SSHGptClient {
 // 返回是 执行的command和 效果
 func (client *SSHGptClient) TranslateChatgptCmd(commandText ...string) (string, error) {
 	info := strings.Join(commandText, "")
-	askCommand := fmt.Sprintf(client.describeText, info)
+	askCommand := fmt.Sprintf(client.promptText, info)
 	log.Printf("chatgpt message %s", askCommand)
 
 	conversation, err := client.client.GetOrCreateConversation(uuid.V4(), &chatgpt.ConversationConfig{})
@@ -74,7 +71,10 @@ func (client *SSHGptClient) TranslateChatgptCmd(commandText ...string) (string, 
 	if len(match) == 2 {
 		outputCmd = match[1]
 	} else {
-		return "", errors.New(fmt.Sprintf("chatgpt返回的命令不对 %s", outputCmd))
+		return "", errors.New(fmt.Sprintf("chatgpt返回的命令不对:%s", outputCmd))
+	}
+	if outputCmd == "" {
+		return "", errors.New(fmt.Sprintf("chatgpt无法理解你的输入%s", commandText))
 	}
 	return outputCmd, nil
 }
