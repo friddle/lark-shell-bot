@@ -30,7 +30,7 @@ func NewChatGptClient() *SSHGptClient {
 		client:     gptClient,
 		promptText: "你作为资深的SRE，请帮助用户翻译固定的文档",
 		describeText: "请把如下的描述翻译成固定的Linux命令格式。" +
-			"并以[]的格式输出,假如无法识别为Linux命令，则返回为\"命令:[]\"\r" +
+			"并以 command:[Linux命令]的格式输出,假如无法识别为Linux命令，则返回为\"command:[]\"\n" +
 			"描述为:%s",
 	}
 	client.RunInit()
@@ -60,7 +60,7 @@ func (client *SSHGptClient) TranslateChatgptCmd(commandText ...string) (string, 
 		return "", errors.New("输入文本无法理解相应问题")
 	}
 
-	rx := regexp.MustCompile(`命令:\[(.*)\]`)
+	rx := regexp.MustCompile(`command.*\[(.*)\]`)
 	// 在字符串中查找匹配项
 	match := rx.FindStringSubmatch(outputCmd)
 	if len(match) == 2 {

@@ -141,6 +141,15 @@ func FeishuServer(feishuConf *chatbot.Config) (chatbot.ChatBot, error) {
 			}
 			return nil
 		}
+		if strings.HasPrefix(command, "/gptssh") {
+			command, err := chatGptClient.TranslateChatgptCmd(commands[2:]...)
+			output, err := sshServerClient.executeCmd(commands[1], command)
+			if err != nil {
+				ReplyText(reply, fmt.Sprintf("err %v", err))
+			}
+			ReplyText(reply, output)
+			return nil
+		}
 		if strings.HasPrefix(command, "/ssh") {
 			output, err := sshServerClient.executeCmd(commands[1], commands[2:]...)
 			if err != nil {
