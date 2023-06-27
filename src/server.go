@@ -125,6 +125,10 @@ func FeishuServer(feishuConf *chatbot.Config) {
 		RunCommand(reply, cmd, args...)
 		return nil
 	})
+
+	if err := bot.Run(); err != nil {
+		logger.Fatalf("bot error:%v", err)
+	}
 }
 
 func RunCommand(reply chatbot.MessageReply, command string, args ...string) {

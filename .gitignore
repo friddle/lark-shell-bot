@@ -1,3 +1,4 @@
 .feishu.env
 .idea
 .vscode
+build_local.sh

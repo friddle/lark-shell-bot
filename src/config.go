@@ -9,8 +9,8 @@ import (
 
 func ReadFeishuConfig() *chatbot.Config {
 	//假如有文件。读取文件
-	if Exists("./feishu.env") {
-		err := godotenv.Load("./feishu.env")
+	if Exists(".feishu.env") {
+		err := godotenv.Load(".feishu.env")
 		if err != nil {
 			logs.Fatalf("read err %v", err)
 		}
