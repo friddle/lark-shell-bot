@@ -1,3 +1,3 @@
 请把如下的描述翻译成固定的Linux命令格式。
-并以 command:[Linux命令]的格式输出,假如无法识别为Linux命令，则返回为"command:[]"
+并以 command:[Linux命令]的格式输出,假如无法识别为Linux命令，则返回为"command:[]",假如识别到Linux命令为危险操作。则返回为"command:[危险操作,拒绝执行]"
 

@@ -32,6 +32,10 @@ func getUser(request *feishuEvent.EventRequest) (*user.RetrieveResponse, error) 
 }
 
 func ReplyText(reply func(context string, msgType ...string) error, text string) error {
+	if text == "" {
+		text = "服务没有返回"
+	}
+
 	msgType, content, err := mc.
 		NewContent().
 		Post(&mc.ContentTypePost{
@@ -102,7 +106,13 @@ func FeishuServer(feishuConf *chatbot.Config) (chatbot.ChatBot, error) {
 
 	bot.OnCommand("help", &chatbot.Command{
 		Handler: func(args []string, request *event.EventRequest, reply chatbot.MessageReply) error {
-			if err := ReplyText(reply, "run command bro"); err != nil {
+			helpText := "直接输入就是运行命令," +
+				"可以用/machines      :查看配置的服务器列表" +
+				"可以用/ssh 服务器  :命令执行远程命令" +
+				"可以用/chatgpt 命令描述 :执行智能命令" +
+				"可以用/gptssh 服务器 命令描述  :执行远程智能命令"
+
+			if err := ReplyText(reply, helpText); err != nil {
 				return fmt.Errorf("failed to reply: %v", err)
 			}
 			return nil
@@ -132,7 +142,7 @@ func FeishuServer(feishuConf *chatbot.Config) (chatbot.ChatBot, error) {
 				ReplyText(reply, "ChatGpt 没有设置或者相应配置不正确")
 				return nil
 			}
-			command, err := chatGptClient.TranslateChatgptCmd(commands[1:]...)
+			command, err := chatGptClient.TranslateChatgptCmd(request.ChatID(), commands[1:]...)
 			if err == nil {
 				ReplyText(reply, fmt.Sprintf("执行command:%s", command))
 				RunCommand(reply, command)
@@ -142,10 +152,14 @@ func FeishuServer(feishuConf *chatbot.Config) (chatbot.ChatBot, error) {
 			return nil
 		}
 		if strings.HasPrefix(command, "/gptssh") {
-			command, err := chatGptClient.TranslateChatgptCmd(commands[2:]...)
+			command, err := chatGptClient.TranslateChatgptCmd(request.ChatID(), commands[2:]...)
+			if err != nil {
+				ReplyText(reply, fmt.Sprintf("执行命令失败 %v", err))
+			}
+			ReplyText(reply, fmt.Sprintf("执行command:%s", command))
 			output, err := sshServerClient.executeCmd(commands[1], command)
 			if err != nil {
-				ReplyText(reply, fmt.Sprintf("err %v", err))
+				ReplyText(reply, fmt.Sprintf("执行命令失败 %v", err))
 			}
 			ReplyText(reply, output)
 			return nil

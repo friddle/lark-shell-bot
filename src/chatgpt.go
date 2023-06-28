@@ -43,16 +43,17 @@ func NewChatGptClient() *SSHGptClient {
 }
 
 // 返回是 执行的command和 效果
-func (client *SSHGptClient) TranslateChatgptCmd(commandText ...string) (string, error) {
+func (client *SSHGptClient) TranslateChatgptCmd(id string, commandText ...string) (string, error) {
 	info := strings.Join(commandText, "")
 	askCommand := fmt.Sprintf(client.promptText, info)
-	log.Printf("chatgpt message %s", askCommand)
 
 	conversation, err := client.client.GetOrCreateConversation(uuid.V4(), &chatgpt.ConversationConfig{})
 	if err != nil {
 		return "", err
 	}
-	outputCmdBytes, err := conversation.Ask([]byte(askCommand), &chatgpt.ConversationAskConfig{})
+	outputCmdBytes, err := conversation.Ask([]byte(askCommand), &chatgpt.ConversationAskConfig{
+		ID: id,
+	})
 	if err != nil {
 		return "", err
 	}
@@ -76,6 +77,7 @@ func (client *SSHGptClient) TranslateChatgptCmd(commandText ...string) (string, 
 	if outputCmd == "" {
 		return "", errors.New(fmt.Sprintf("chatgpt无法理解你的输入%s", commandText))
 	}
+	log.Printf("chatgpt ask:%s \r response:%s\r", askCommand, outputCmd)
 	return outputCmd, nil
 }
 

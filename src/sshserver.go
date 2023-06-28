@@ -24,6 +24,7 @@ func (client *ServerCmdClient) executeCmd(machine string, cmd ...string) (string
 		if err != nil {
 			return "", err
 		}
+		logs.Printf("machine %s do cmd %s", machine, strings.Join(cmd, " "))
 		smartOutput, err := sshClient.Sshclient.Script(strings.Join(cmd, " ")).SmartOutput()
 		return string(smartOutput), err
 	} else {
