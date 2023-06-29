@@ -8,9 +8,8 @@ COPY . /app/
 RUN go mod download
 RUN go build -o dist/feishu_shell_bot ./main.go
 
-FROM alpine:latest
+FROM golang:1.18
 USER root
-
 COPY --from=builder /app/dist/feishu_shell_bot /app/feishu_shell_bot
 RUN chmod +x /app/feishu_shell_bot
 ENV FEISHU_APP_ID=cli_aaaaaaaaaaaaa
