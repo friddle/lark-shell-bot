@@ -41,7 +41,7 @@ docker run -d -p 8080:8080 --env-file=.feishu.env friddle/lark-shell-bot
 
 
 
-## 高阶使用
+## 使用ChatGPT功能
 ![ChatGpt功能](./pic/chatgpt.png)
 
 设置ChatGpt
