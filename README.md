@@ -33,6 +33,13 @@ wget -O .feishu.env https://raw.githubusercontent.com/friddle/lark-shell-bot/mas
 编辑 .feishu.env
 ./feishu_shell_bot
 ```
+或者使用
+```docker
+docker run -d -p 8080:8080 --env-file=.feishu.env friddle/lark-shell-bot
+```
+
+
+
 
 ## 高阶使用
 ![ChatGpt功能](./pic/chatgpt.png)
