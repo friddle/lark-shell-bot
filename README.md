@@ -64,8 +64,8 @@ CHATGPT_AZURE_API_VERSION=2023-03-15-preview
 设置服务器
 ![服务器功能](./pic/machines.png)
 ```shell
-编辑 .machines.env 文件
-填写服务器信息
+编辑 .machines.yaml 文件
+填写服务器信息,具体格式参考 .machines.yaml.sample
 然后执行
 /machines 查看服务器列表
 /ssh machine-01 服务器名字 ls
