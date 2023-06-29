@@ -4,6 +4,10 @@
 配置请配置.feishu.env.sample 然后重命名到 .feishu.env
 或者也可以直接在环境变量中注入相应的配置
 
+效果
+
+![Gpt主功能](./pic/main.png)
+
 
 ```conf
 FEISHU_APP_ID=飞书的AppId
@@ -30,10 +34,19 @@ wget -O .feishu.env https://raw.githubusercontent.com/friddle/lark-shell-bot/mas
 ```
 
 高阶使用
+
+![ChatGpt功能](./pic/chatgpt.png)
+
 设置ChatGpt
 ```shell
-编辑.chatgpt.env 文件
+编辑.chatgpt.env 文件.所有的key参考.chatgpt.env.sample
 填写相应的key
+
+CHATGPT_API_KEY=aaaaaaaaaaaaaaaaaaaaaaaaaa
+CHATGPT_API_TYPE=azure
+CHATGPT_AZURE_RESOURCE=friddle
+CHATGPT_AZURE_DEPLOYMENT=friddle-chatgpt-3.5
+CHATGPT_AZURE_API_VERSION=2023-03-15-preview
 ```
 然后飞书请求的时候执行
 ```shell
@@ -41,6 +54,7 @@ wget -O .feishu.env https://raw.githubusercontent.com/friddle/lark-shell-bot/mas
 ```
 
 设置服务器
+![服务器功能](./pic/machines.png)
 ```shell
 编辑 .machines.env 文件
 填写服务器信息
