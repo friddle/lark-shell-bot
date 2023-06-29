@@ -187,7 +187,19 @@ func FeishuServer(feishuConf *chatbot.Config) (chatbot.ChatBot, error) {
 }
 
 func RunCommand(reply chatbot.MessageReply, command string) {
-	cmd := exec.Command("bash", "-c", fmt.Sprintf("%s", command))
+	var newCmd []string
+	if strings.HasPrefix(command, "sshpass") ||
+		strings.HasPrefix(command, "ssh") ||
+		strings.HasPrefix(command, "bash") ||
+		strings.HasPrefix(command, "sudo") ||
+		strings.HasPrefix(command, "su") ||
+		strings.HasPrefix(command, "sh") {
+		newCmd = append(newCmd, strings.Split(command, " ")...)
+	} else {
+		newCmd = append(newCmd, "bash", "-c")
+		newCmd = append(newCmd, command)
+	}
+	cmd := exec.Command(newCmd[0], newCmd[1:]...)
 	logs.Println(cmd)
 	stderr, err := cmd.StderrPipe()
 	stdout, err := cmd.StdoutPipe()
