@@ -1,5 +1,6 @@
 # Feishu-Shell-Bot
-功能很简单。就是跑一个shell命令客户端。跟飞书相关
+功能很简单。就是跑一个shell命令客户端。跟飞书ChatBot相关
+基于飞书客户端
 
 配置请配置.feishu.env.sample 然后重命名到 .feishu.env
 或者也可以直接在环境变量中注入相应的配置
