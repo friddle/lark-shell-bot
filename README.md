@@ -19,9 +19,10 @@ FEISHU_BOT_PORT=监听的端口
 https://www.feishu.cn/hc/zh-CN/articles/360049067916-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%BC%81%E4%B8%9A%E8%87%AA%E5%BB%BA%E5%BA%94%E7%94%A8
 
 
-直接使用
+直接使用(记得修改版本)
 ```shell
-wget -O feishu_shell_bot https://github.com/friddle/lark-shell-bot/releases/download/1.0/feishu_shell_bot
+version=1.1
+wget -O feishu_shell_bot https://github.com/friddle/lark-shell-bot/releases/download/${version}/feishu_shell_bot
 chmod +x feishu_shell_bot
 wget -O .feishu.env https://raw.githubusercontent.com/friddle/lark-shell-bot/master/.feishu.env.sample
 编辑 .feishu.env
