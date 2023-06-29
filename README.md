@@ -19,12 +19,12 @@ FEISHU_BOT_PATH=监听服务的path
 FEISHU_BOT_PORT=监听的端口
 ```
 
-具体配置的含义请参考飞书后台开发者的文档
-具体飞书怎么配置后端程序。请直接参考项目
-https://www.feishu.cn/hc/zh-CN/articles/360049067916-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%BC%81%E4%B8%9A%E8%87%AA%E5%BB%BA%E5%BA%94%E7%94%A8
+具体配置的含义请参考飞书后台开发者的文档.  
+具体飞书怎么配置后端程序。请直接参考地址.  
+[飞书开发者后台](https://www.feishu.cn/hc/zh-CN/articles/360049067916-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%BC%81%E4%B8%9A%E8%87%AA%E5%BB%BA%E5%BA%94%E7%94%A8)
 
 
-直接使用(记得修改版本)
+## 直接使用(记得修改版本)
 ```shell
 version=1.1
 wget -O feishu_shell_bot https://github.com/friddle/lark-shell-bot/releases/download/${version}/feishu_shell_bot
@@ -34,8 +34,7 @@ wget -O .feishu.env https://raw.githubusercontent.com/friddle/lark-shell-bot/mas
 ./feishu_shell_bot
 ```
 
-高阶使用
-
+## 高阶使用
 ![ChatGpt功能](./pic/chatgpt.png)
 
 设置ChatGpt
@@ -54,6 +53,7 @@ CHATGPT_AZURE_API_VERSION=2023-03-15-preview
 /chatgpt 查看本地目录
 ```
 
+## 在服务器执行远程命令
 设置服务器
 ![服务器功能](./pic/machines.png)
 ```shell
@@ -61,7 +61,8 @@ CHATGPT_AZURE_API_VERSION=2023-03-15-preview
 填写服务器信息
 然后执行
 /machines 查看服务器列表
-/ssh machine-01(配置的服务器名字) ls
+/ssh machine-01 服务器名字 ls
+/gptssh machine-01 服务器名字 查看当前目录
 ```
 
 
